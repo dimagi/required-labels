@@ -9,7 +9,7 @@ REQUIRED_LABELS = ['ready for review']
 def main():
     pr_number = '1858' # will come from PR event listener
     labels_json = get_labels_for_pr(pr_number)
-    return create_status_json(pr_number, any(l['name'] in REQUIRED_LABELS for l in labels_json))
+    return create_status_json(any(l['name'] in REQUIRED_LABELS for l in labels_json))
 
 
 def create_status_json(has_required_labels):
