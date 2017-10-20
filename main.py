@@ -1,15 +1,21 @@
 import requests
 import json
-from flask import Flask
+from flask import Flask, request
 app = Flask(__name__)
 
 REQUIRED_LABELS = ['ready for review']
 
-@app.route('/')
+# config = {
+#     "all": ["label1", "label2"],
+#     "not": ["label3"],
+#     "any": ["label4", "label5"]
+# }
+
+
+@app.route('/', methods=["POST"])
 def main():
-    pr_number = '1858' # will come from PR event listener
-    labels_json = get_labels_for_pr(pr_number)
-    return create_status_json(any(l['name'] in REQUIRED_LABELS for l in labels_json))
+    pull_request = PullRequest(request.get_json())
+    return create_status_json(any(l['name'] in REQUIRED_LABELS for l in pull_request.labels))
 
 
 def create_status_json(has_required_labels):
@@ -26,8 +32,14 @@ def create_status_json(has_required_labels):
     return json.dumps(response_json)
 
 
-def get_labels_for_pr(pr_number):
-    # https://api.github.com/repos/dimagi/commcare-android/issues/{PR#}/labels
-    url = 'https://api.github.com/repos/dimagi/commcare-android/issues/{}/labels'.format(pr_number)
-    response = requests.get(url)
-    return response.json()
+class PullRequest(object):
+    def __init__(self, event):
+        self.event = event
+
+    @property
+    def label_url(self):
+        return "{}/labels".format(self.event['pull_request']['issue_url'])
+
+    @property
+    def labels(self):
+        return requests.get(self.label_url).json()
