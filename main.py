@@ -12,10 +12,12 @@ REQUIRED_LABELS = ['ready for review']
 # }
 
 
-@app.route('/', methods=["POST"])
+@app.route('/', methods=["POST", "GET"])
 def main():
-    pull_request = PullRequest(request.get_json())
-    return create_status_json(any(l['name'] in REQUIRED_LABELS for l in pull_request.labels))
+    #pull_request = PullRequest(request.get_json())
+    with open('test_pr.json') as json_file:
+        pull_request = PullRequest(json.load(json_file))
+        return create_status_json(any(l['name'] in REQUIRED_LABELS for l in pull_request.labels))
 
 
 def create_status_json(has_required_labels):
