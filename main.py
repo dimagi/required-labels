@@ -1,47 +1,33 @@
-import requests
 import json
+import os
 from flask import Flask, request
+from PullRequest import PullRequest
+
 app = Flask(__name__)
 
-REQUIRED_LABELS = ['ready for review']
-
-# config = {
-#     "all": ["label1", "label2"],
-#     "not": ["label3"],
-#     "any": ["label4", "label5"]
-# }
+REQUIRED_LABELS_ANY = '' if os.environ.get('ANY') is None else os.environ.get('ANY').split(',')
+REQUIRED_LABELS_ALL = '' if os.environ.get('ALL') is None else os.environ.get('ALL').split(',')
+BANNED_LABELS = '' if os.environ.get('NONE') is None else os.environ.get('NONE').split(',')
 
 
 @app.route('/', methods=["POST", "GET"])
 def main():
     #pull_request = PullRequest(request.get_json())
-    with open('test_pr.json') as json_file:
+    with open('./tests/pr_event_no_labels.json') as json_file:
         pull_request = PullRequest(json.load(json_file))
-        return create_status_json(any(l['name'] in REQUIRED_LABELS for l in pull_request.labels))
+        return str(create_status_json(
+            pull_request.validate_labels(REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS)))
 
 
-def create_status_json(has_required_labels):
-    if has_required_labels:
-        description = "Your PR has the necessary labels"
+def create_status_json(passes_label_requirements):
+    if passes_label_requirements:
+        description = "PR has the necessary labels"
     else:
-        description = "Your PR requires 1 of the following labels: {}".format(", ".join(REQUIRED_LABELS))
+        description = "PR does not pass the label requirements for this repository"
     response_json = {
-        "state": "success" if has_required_labels else "failure",
+        "state": "success" if passes_label_requirements else "failure",
         "target_url": "",
         "description": description,
         "context": "Required-Labels Status Checker"
     }
     return json.dumps(response_json)
-
-
-class PullRequest(object):
-    def __init__(self, event):
-        self.event = event
-
-    @property
-    def label_url(self):
-        return "{}/labels".format(self.event['pull_request']['issue_url'])
-
-    @property
-    def labels(self):
-        return requests.get(self.label_url).json()
