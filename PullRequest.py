@@ -16,6 +16,7 @@ class PullRequest(object):
         return requests.get(self.label_url).json()
 
     def validate_labels(self, required_any, required_all, banned):
+        #print("labels for this pr: {}".format(str(self.labels)))
         if required_any != '' and not any(l['name'] in required_any for l in self.labels):
             return False
         if required_all != '' and any(l not in self.labels for l in required_all):
