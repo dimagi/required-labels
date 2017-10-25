@@ -44,7 +44,7 @@ class LabelAssertionTests(unittest.TestCase):
 
     def test_all_fails(self):
         pr = init_pr_with_issue_url(PR_1830_URL)
-        self.assertTrue(pr.validate_labels(required_any=NO_LABELS, required_all=MULTIPLE_LABELS, banned=NO_LABELS))
+        self.assertFalse(pr.validate_labels(required_any=NO_LABELS, required_all=MULTIPLE_LABELS, banned=NO_LABELS))
 
 
 def init_pr_with_event_json(filename):

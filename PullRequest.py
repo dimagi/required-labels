@@ -1,5 +1,5 @@
 import requests
-
+from config import GITHUB_USER, GITHUB_PW
 
 class PullRequest(object):
     def __init__(self, event=None):
@@ -13,7 +13,7 @@ class PullRequest(object):
 
     @property
     def labels(self):
-        return requests.get(self.label_url).json()
+        return requests.get(self.label_url, auth=(GITHUB_USER, GITHUB_PW)).json()
 
     def validate_labels(self, required_any, required_all, banned):
         #print("labels for this pr: {}".format(str(self.labels)))

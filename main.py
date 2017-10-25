@@ -1,21 +1,17 @@
 import json
-import os
 from flask import Flask, request
 from PullRequest import PullRequest
+from config import REQUIRED_LABELS_ALL, REQUIRED_LABELS_ANY, BANNED_LABELS
 
 app = Flask(__name__)
-
-REQUIRED_LABELS_ANY = '' if os.environ.get('ANY') is None else os.environ.get('ANY').split(',')
-REQUIRED_LABELS_ALL = '' if os.environ.get('ALL') is None else os.environ.get('ALL').split(',')
-BANNED_LABELS = '' if os.environ.get('NONE') is None else os.environ.get('NONE').split(',')
 
 
 @app.route('/', methods=["POST", "GET"])
 def main():
     #pull_request = PullRequest(request.get_json())
-    with open('./tests/pr_event_no_labels.json') as json_file:
-        pull_request = PullRequest(json.load(json_file))
-        return str(create_status_json(pull_request, REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS))
+    pull_request = PullRequest()
+    pull_request.set_issue_url('https://api.github.com/repos/dimagi/commcare-android/issues/1858')
+    return str(create_status_json(pull_request, REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS))
 
 
 def create_status_json(pull_request, required_any, required_all, banned):
