@@ -8,10 +8,22 @@ app = Flask(__name__)
 
 @app.route('/', methods=["POST", "GET"])
 def main():
-    #pull_request = PullRequest(request.get_json())
-    pull_request = PullRequest()
-    pull_request.set_issue_url('https://api.github.com/repos/dimagi/commcare-android/issues/1858')
-    return str(create_status_json(pull_request, REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS))
+    #event_json = request.get_json()
+    with open('./tests/pr_event_no_labels.json') as json_file:
+        event_json = json.load(json_file)
+
+    if event_warrants_label_check(event_json):
+        pull_request = PullRequest(event_json)
+        status_code = pull_request.post_status(
+            create_status_json(pull_request, REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS))
+        return str(status_code)
+    else:
+        return 'No label check needed'
+
+
+def event_warrants_label_check(pr_event_json):
+    action = pr_event_json['action']
+    return action == "opened" or action == "reopened" or action == "labeled" or action == "unlabeled"
 
 
 def create_status_json(pull_request, required_any, required_all, banned):

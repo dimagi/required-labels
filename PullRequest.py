@@ -11,6 +11,14 @@ class PullRequest(object):
     def label_url(self):
         return "{}/labels".format(self.issue_url)
 
+    @property
+    def full_repo_name(self):
+        return self.event['pull_request']['head']['repo']['full_name']
+
+    @property
+    def head_commit(self):
+        return self.event['pull_request']['head']['sha']
+
     def request_labels_json(self):
         return requests.get(self.label_url, auth=(GITHUB_USER, GITHUB_PW)).json()
 
@@ -23,6 +31,14 @@ class PullRequest(object):
         if banned != [''] and any(l in self_labels_list for l in banned):
             return False
         return True
+
+    def post_status(self, status_json):
+        url = 'https://api.github.com/repos/{full_repo_name}/statuses/{sha}'.format(
+            full_repo_name=self.full_repo_name,
+            sha=self.head_commit)
+        print(url)
+        r = requests.post(url, data=status_json)
+        return r.status_code
 
     # for testing
     def set_issue_url(self, url):
