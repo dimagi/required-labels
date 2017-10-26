@@ -1,8 +1,8 @@
 import unittest
 import json
-from PullRequest import PullRequest
+from models import PullRequest
 
-NO_LABELS = ['']
+NO_LABELS = ''
 MOBILE_PRODUCT_LABELS = ['product/all-users', 'product/custom', 'product/invisible', 'product/internal-or-flagged']
 MULTIPLE_LABELS = ['cross requested', 'product/internal-or-flagged', 'ready for review']
 
@@ -54,7 +54,7 @@ def init_pr_with_event_json(filename):
 
 def init_pr_with_issue_url(url):
     pr = PullRequest()
-    pr.set_issue_url(url)
+    pr.issue_url = url
     return pr
 
 

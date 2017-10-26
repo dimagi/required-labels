@@ -1,7 +1,7 @@
 [Labels]
-required-labels-any: Either provide a list of comma-separated labels, or leave blank if not using
-required-labels-all: Either provide a list of comma-separated labels, or leave blank if not using
-banned-labels: Either provide a list of comma-separated labels, or leave blank if not using
+required-labels-any: # Either provide a list of comma-separated labels, or leave blank if not using
+required-labels-all: # Either provide a list of comma-separated labels, or leave blank if not using
+banned-labels: # Either provide a list of comma-separated labels, or leave blank if not using
 
 [GitHub]
 user:

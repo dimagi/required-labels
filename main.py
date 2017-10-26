@@ -1,6 +1,6 @@
 import json
 from flask import Flask, request
-from PullRequest import PullRequest
+from models import PullRequest
 from config import REQUIRED_LABELS_ALL, REQUIRED_LABELS_ANY, BANNED_LABELS
 
 app = Flask(__name__)
@@ -51,4 +51,3 @@ def construct_detailed_failure_message(required_any, required_all, banned):
     if banned != '':
         requirement_details.append('[none of the following labels: {}]'.format(', '.join(banned)))
     return 'Your PR must have: {}'.format(' and '.join(requirement_details))
-
