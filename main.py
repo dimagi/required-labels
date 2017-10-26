@@ -6,12 +6,9 @@ from config import REQUIRED_LABELS_ALL, REQUIRED_LABELS_ANY, BANNED_LABELS
 app = Flask(__name__)
 
 
-@app.route('/', methods=["POST", "GET"])
+@app.route('/', methods=["POST"])
 def main():
-    #event_json = request.get_json()
-    with open('./pr_event_no_labels.json') as json_file:
-        event_json = json.load(json_file)
-
+    event_json = request.get_json()
     if event_warrants_label_check(event_json):
         pull_request = PullRequest(event_json)
         status_code = pull_request.post_status(
