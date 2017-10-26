@@ -36,7 +36,7 @@ class LabelAssertionTests(unittest.TestCase):
 
     def test_banned_fails(self):
         pr = init_pr_with_issue_url(PR_1858_URL)
-        self.assertTrue(pr.validate_labels(required_any=NO_LABELS, required_all=NO_LABELS, banned=MOBILE_PRODUCT_LABELS))
+        self.assertFalse(pr.validate_labels(required_any=NO_LABELS, required_all=NO_LABELS, banned=MOBILE_PRODUCT_LABELS))
 
     # This test is currently failing
     def test_all_passes(self):
