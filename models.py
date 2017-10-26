@@ -36,10 +36,10 @@ class PullRequest(object):
 
     def validate_labels(self, required_any, required_all, banned):
         labels_list = [l['name'] for l in self.labels]
-        if required_any != '' and not any(l in required_any for l in labels_list):
+        if required_any is not None and not any(l in required_any for l in labels_list):
             return False
-        if required_all != '' and any(l not in labels_list for l in required_all):
+        if required_all is not None and any(l not in labels_list for l in required_all):
             return False
-        if banned != '' and any(l in labels_list for l in banned):
+        if banned is not None and any(l in labels_list for l in banned):
             return False
         return True

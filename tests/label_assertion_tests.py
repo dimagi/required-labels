@@ -1,7 +1,7 @@
 import unittest
 from test_utils import MockPullRequest
 
-NO_LABELS = ''
+NO_LABELS = None
 MOBILE_PRODUCT_LABELS = ['product/all-users', 'product/custom', 'product/invisible', 'product/internal-or-flagged']
 MULTIPLE_LABELS = ['cross requested', 'product/internal-or-flagged', 'ready for review']
 
