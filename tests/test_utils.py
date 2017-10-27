@@ -1,10 +1,11 @@
-from models import PullRequest
+from utils import PullRequest
 import json
 
 class MockPullRequest(PullRequest):
     def __init__(self, labels_json_file):
-        PullRequest.__init__(self)
-        self.labels_json = json.load(open(labels_json_file))
+        super(MockPullRequest, self).__init__()
+        with open(labels_json_file) as f:
+            self.labels_json = json.load(f)
 
     @property
     def labels(self):
