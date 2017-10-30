@@ -1,0 +1,16 @@
+[
+  {
+    "id": 107669780,
+    "url": "https://api.github.com/repos/dimagi/commcare-android/labels/cross%20requested",
+    "name": "cross requested",
+    "color": "0052cc",
+    "default": false
+  },
+  {
+    "id": 116252758,
+    "url": "https://api.github.com/repos/dimagi/commcare-android/labels/ready%20for%20review",
+    "name": "ready for review",
+    "color": "fbca04",
+    "default": false
+  }
+]

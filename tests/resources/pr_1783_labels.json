@@ -1,0 +1,16 @@
+[
+  {
+    "id": 107669776,
+    "url": "https://api.github.com/repos/dimagi/commcare-android/labels/bug",
+    "name": "bug",
+    "color": "fc2929",
+    "default": true
+  },
+  {
+    "id": 116252758,
+    "url": "https://api.github.com/repos/dimagi/commcare-android/labels/ready%20for%20review",
+    "name": "ready for review",
+    "color": "fbca04",
+    "default": false
+  }
+]

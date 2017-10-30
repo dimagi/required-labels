@@ -1,0 +1,9 @@
+[
+  {
+    "id": 724786974,
+    "url": "https://api.github.com/repos/dimagi/commcare-android/labels/product/invisible",
+    "name": "product/invisible",
+    "color": "cfd2d6",
+    "default": false
+  }
+]
