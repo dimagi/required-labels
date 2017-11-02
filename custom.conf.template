@@ -5,5 +5,6 @@ required-labels-all:
 banned-labels:
 
 [GitHub]
+# Include the username and password of a user that has push access to the repository in which your Webhook is configured
 user:
 password:
