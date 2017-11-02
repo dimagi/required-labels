@@ -17,6 +17,15 @@ def main():
         return 'No label check needed'
 
 
+@app.route('/config', methods=["GET"])
+def config():
+    return """
+    Any: {}<br/>
+    All: {}<br/>
+    Banned: {}<br/>
+    """.format(REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS)
+
+
 def event_warrants_label_check(pr_event_json):
     try:
         return pr_event_json['action'] in ['opened', 'reopened', 'labeled', 'unlabeled', 'synchronize']
