@@ -41,10 +41,9 @@ class PullRequest(object):
     def create_status_json(self, required_any, required_all, banned):
         passes_label_requirements = self.validate_labels(required_any, required_all, banned)
         if passes_label_requirements:
-            description = "PR has the necessary labels"
+            description = "Label requirements satisfied."
         else:
-            description = "PR does not pass the label requirements for this repo --> {}".format(
-                construct_detailed_failure_message(required_any, required_all, banned))
+            description = "Label requirements not satisfied."
         response_json = {
             "state": "success" if passes_label_requirements else "failure",
             "target_url": "",
@@ -62,14 +61,3 @@ class PullRequest(object):
         if banned is not None and any(l in labels_list for l in banned):
             return False
         return True
-
-
-def construct_detailed_failure_message(required_any, required_all, banned):
-    requirement_details = []
-    if required_any is not None:
-        requirement_details.append('[1 of the following labels: {}]'.format(', '.join(required_any)))
-    if required_all is not None:
-        requirement_details.append('[all of the following labels: {}]'.format(', '.join(required_all)))
-    if banned is not None:
-        requirement_details.append('[none of the following labels: {}]'.format(', '.join(banned)))
-    return 'Your PR must have: {}'.format(' and '.join(requirement_details))
