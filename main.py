@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request
 from utils import PullRequest
 from config import REQUIRED_LABELS_ALL, REQUIRED_LABELS_ANY, BANNED_LABELS
@@ -21,3 +22,8 @@ def event_warrants_label_check(pr_event_json):
         return pr_event_json['action'] in ['opened', 'reopened', 'labeled', 'unlabeled', 'synchronize']
     except KeyError:
         return False
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
