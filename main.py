@@ -17,5 +17,4 @@ def main():
 
 
 def event_warrants_label_check(pr_event_json):
-    return pr_event_json['action'] in ['opened', 'reopened', 'labeled', 'unlabeled']
-
+    return 'action' in pr_event_json and pr_event_json['action'] in ['opened', 'reopened', 'labeled', 'unlabeled']
