@@ -1,6 +1,6 @@
 import os
 import unittest
-from test_utils import MockPullRequest
+from tests.utils import MockPullRequest
 
 NO_LABELS = None
 MOBILE_PRODUCT_LABELS = ['product/all-users', 'product/custom', 'product/invisible', 'product/internal-or-flagged']
