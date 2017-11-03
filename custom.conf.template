@@ -1,6 +1,6 @@
 [Labels]
 # For each parameter, either provide a list of comma-separated labels, or leave blank if not using
-required-labels-any:sample-required-label
+required-labels-any:
 required-labels-all:
 banned-labels:
 

@@ -1,4 +1,5 @@
 import os
+import sys
 from configparser import ConfigParser, NoSectionError
 
 
@@ -35,11 +36,18 @@ def get_credentials():
         return GITHUB_USER, GITHUB_PW
 
 
-if not any([REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS]):
-    raise ConfigException(
-        "Please ensure your config file has a [Labels] and [Github] section.\n"
-        "Did you forget to create a configuration file?\n"
-        "You can do this by running\033[1m cp {0}.template {0} \033[0m\n"
-        "You can also add REQUIRED_LABELS_ALL, REQUIRED_LABELS_ANY, or BANNED_LABELS as environment variables"
-        "".format(config_filename)
-    )
+UNIT_TESTING = any([arg for arg in sys.argv if 'test' in arg])
+
+
+if not UNIT_TESTING:
+    labels_configured = any([REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS])
+    credentials_configured = all([GITHUB_PW, GITHUB_USER])
+    if not labels_configured and not credentials_configured:
+        raise ConfigException(
+            "Please ensure your config file has a [Labels] and [Github] section.\n"
+            "Did you forget to create a configuration file?\n"
+            "You can do this by running\033[1m cp {0}.template {0} \033[0m\n"
+            "You can also add REQUIRED_LABELS_ALL, REQUIRED_LABELS_ANY, or BANNED_LABELS along with "
+            "GITHUB_USER and GITHUB_PW as environment variables"
+            "".format(config_filename)
+        )
