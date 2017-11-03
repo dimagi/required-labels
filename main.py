@@ -17,4 +17,7 @@ def main():
 
 
 def event_warrants_label_check(pr_event_json):
-    return 'action' in pr_event_json and pr_event_json['action'] in ['opened', 'reopened', 'labeled', 'unlabeled']
+    try:
+        return pr_event_json['action'] in ['opened', 'reopened', 'labeled', 'unlabeled', 'synchronize']
+    except KeyError:
+        return False
