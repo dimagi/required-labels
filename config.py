@@ -42,7 +42,7 @@ UNIT_TESTING = any([arg for arg in sys.argv if 'test' in arg])
 if not UNIT_TESTING:
     labels_configured = any([REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS])
     credentials_configured = all([GITHUB_PW, GITHUB_USER])
-    if not labels_configured and not credentials_configured:
+    if not labels_configured or not credentials_configured:
         raise ConfigException(
             "Please ensure your config file has a [Labels] and [Github] section.\n"
             "Did you forget to create a configuration file?\n"
