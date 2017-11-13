@@ -1,5 +1,4 @@
 import os
-import sys
 from flask import Flask, request
 from utils import PullRequest
 from config import REQUIRED_LABELS_ALL, REQUIRED_LABELS_ANY, BANNED_LABELS
