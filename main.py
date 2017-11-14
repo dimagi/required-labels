@@ -11,6 +11,7 @@ def main():
     event_json = request.get_json()
     if event_warrants_label_check(event_json):
         pull_request = PullRequest(event_json)
+        print("Checking labels for PR {}".format(pull_request.issue_url))
         status_code = pull_request.compute_and_post_status(REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS)
         return str(status_code)
     else:
