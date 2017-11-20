@@ -53,11 +53,16 @@ class PullRequest(object):
         return json.dumps(response_json)
 
     def validate_labels(self, required_any, required_all, banned):
-        labels_list = [l['name'] for l in self.labels]
-        if required_any is not None and not any(l in required_any for l in labels_list):
+        try:
+            labels_json = self.labels
+            labels_list = [l['name'] for l in labels_json]
+            if required_any is not None and not any(l in required_any for l in labels_list):
+                return False
+            if required_all is not None and any(l not in labels_list for l in required_all):
+                return False
+            if banned is not None and any(l in labels_list for l in banned):
+                return False
+            return True
+        except KeyError:
+            print('self.labels was of unexpected format for PR event {}: {}'.format(self.issue_url, labels_json))
             return False
-        if required_all is not None and any(l not in labels_list for l in required_all):
-            return False
-        if banned is not None and any(l in labels_list for l in banned):
-            return False
-        return True
