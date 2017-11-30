@@ -63,6 +63,6 @@ class PullRequest(object):
             if banned is not None and any(l in labels_list for l in banned):
                 return False
             return True
-        except KeyError:
+        except TypeError:
             print('self.labels was of unexpected format for PR event {}: {}'.format(self.issue_url, labels_json))
             return False
