@@ -3,6 +3,9 @@ import sys
 from configparser import ConfigParser, NoSectionError
 
 
+APP_NAME = "dimagi/required-labels"
+
+
 class ConfigException(Exception):
     pass
 

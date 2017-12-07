@@ -1,6 +1,12 @@
 import json
-import requests
-from config import get_credentials
+from requests import Session
+
+from config import get_credentials, APP_NAME
+
+
+session = Session()
+session.auth = get_credentials()
+session.headers.update({"User-Agent": APP_NAME})
 
 
 class PullRequest(object):
@@ -14,7 +20,10 @@ class PullRequest(object):
         return self.request_labels_json()
 
     def request_labels_json(self):
-        return requests.get(self.label_url, auth=get_credentials()).json()
+        r = session.get(self.label_url)
+        if r.status_code >= 300:
+            print("Got a non-2xx status: ", r.url, r.headers, r.content)
+        return r.json()
 
     @property
     def label_url(self):
@@ -27,7 +36,7 @@ class PullRequest(object):
         url = 'https://api.github.com/repos/{full_repo_name}/statuses/{sha}'.format(
             full_repo_name=self.full_repo_name,
             sha=self.head_commit)
-        r = requests.post(url, data=status_json, auth=get_credentials())
+        r = session.post(url, data=status_json)
         return r.status_code
 
     @property
@@ -48,7 +57,7 @@ class PullRequest(object):
             "state": "success" if passes_label_requirements else "failure",
             "target_url": "",
             "description": description,
-            "context": "Required-Labels Status Checker"
+            "context": APP_NAME,
         }
         return json.dumps(response_json)
 
