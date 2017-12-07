@@ -20,8 +20,9 @@ class PullRequest(object):
         return self.request_labels_json()
 
     def request_labels_json(self):
-        return requests.get(self.label_url, auth=get_credentials()).json()
         r = session.get(self.label_url)
+        if r.status_code >= 300:
+            print("Got a non-2xx status: ", r.url, r.headers, r.content)
         return r.json()
 
     @property
