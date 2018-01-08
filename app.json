@@ -1,0 +1,36 @@
+{
+    "name": "required-labels",
+    "description": "Automated label checking for github pull requests",
+    "repository": "https://github.com/dimagi/required-labels",
+    "keywords": [
+        "github",
+        "labels",
+        "status"
+    ],
+    "env": {
+        "REQUIRED_LABELS_ANY": {
+            "description": "At least one of these labels must be present on the PR",
+            "required": false
+        },
+        "REQUIRED_LABELS_ALL": {
+            "description": "All of these labels must be present on the PR",
+            "required": false
+        },
+        "REQUIRED_LABELS_BANNED": {
+            "description": "None of these labels should be present on the PR",
+            "required": false
+        },
+        "GITHUB_USER": {
+            "description": "The username for the github user that will post the status"
+        },
+        "GITHUB_PW": {
+            "description": "The password for the github user that will post the status"
+        }
+    },
+    "buildpacks": [
+        {
+            "url": "heroku/python"
+        }
+    ],
+    "success_url": "/config"
+}
