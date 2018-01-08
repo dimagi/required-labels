@@ -33,19 +33,12 @@ class PullRequest(object):
         return self.post_status(self.create_status_json(required_any, required_all, banned))
 
     def post_status(self, status_json):
-        url = 'https://api.github.com/repos/{full_repo_name}/statuses/{sha}'.format(
-            full_repo_name=self.full_repo_name,
-            sha=self.head_commit)
-        r = session.post(url, data=status_json)
+        r = session.post(self.statuses_url, data=status_json)
         return r.status_code
 
     @property
-    def full_repo_name(self):
-        return self.event['pull_request']['head']['repo']['full_name']
-
-    @property
-    def head_commit(self):
-        return self.event['pull_request']['head']['sha']
+    def statuses_url(self):
+        return self.event['pull_request']['statuses_url']
 
     def create_status_json(self, required_any, required_all, banned):
         passes_label_requirements = self.validate_labels(required_any, required_all, banned)
