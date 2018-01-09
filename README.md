@@ -1,14 +1,14 @@
-# Github Required Labels
+# GitHub Required Labels
 [![Build Status](https://travis-ci.org/dimagi/required-labels.svg?branch=master)](https://travis-ci.org/dimagi/required-labels)
 
-Automated label :label: checking for Github pull requests.
+:label: Automated label checking for GitHub pull requests.
 
 ![Label requirements satisfied](https://user-images.githubusercontent.com/146896/34694324-a926ebfe-f494-11e7-983f-b10e10719c83.png)
 ![Label requirements not satisfied](https://user-images.githubusercontent.com/146896/34694323-a90da090-f494-11e7-8f44-ae6780390fc9.png)
 
 **required-labels** enforces label rules on your pull requests. We use this at [Dimagi](https://www.dimagi.com) to alert our product and design teams of external-facing changes we are making to our code. 
 
-Check it out in action [here](https://github.com/dimagi/commcare-hq/pulls).
+Check it out in action [here](https://github.com/dimagi/required-labels/pulls?q=is%3Aopen+is%3Apr+label%3Aexamples).
 
 You can set customized label requirements for your PRs to enforce particular team workflows with lists of "required", "banned" or "at least one" labels. For example:
 
@@ -41,8 +41,8 @@ Set up the required labels (comma separated):
 
 Enter the credentials:
 
-- `GITHUB_USER`: The username of the github user that will post the status. We suggest you create a dummy github user for this purpose.
-- `GITHUB_PW`: The password for this github user.
+- `GITHUB_USER`: The username of the GitHub user that will post the status. We suggest you create a dummy github user for this purpose. This user *must* have permission to write to the repo in order for it to post a status. 
+- `GITHUB_PW`: The password for this GitHub user.
 
 Click "deploy app". The app will deploy.
 
@@ -98,7 +98,8 @@ $ gunicorn main:app
 
 ## Set up your repo
 
-In the github repository you want to enable this service, click `Settings` -> `Webhooks` -> `Add Webhook`. Then enter the following settings:
+### Enable the Webhook
+In the GitHub repository you want to enable this service, click `Settings` -> `Webhooks` -> `Add Webhook`. Then enter the following settings:
 
 - **Payload URL**: The URL to your heroku app. e.g. https://your-required-labels.herokuapp.com
 - **Content Type**: "application/json"
@@ -109,6 +110,10 @@ In the github repository you want to enable this service, click `Settings` -> `W
 
 Now, a new "checker" should show up when creating a new pull request.
 ![Label requirements satisfied](https://user-images.githubusercontent.com/146896/34694324-a926ebfe-f494-11e7-983f-b10e10719c83.png)
+
+### Ensure the user has write permissions
+
+In the `Collaborators & teams` settings page, make sure the user who you set up earlier has at least `Write` permissions on the repo.
 
 ## Running Tests
 
