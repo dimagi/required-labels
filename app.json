@@ -16,7 +16,7 @@
             "description": "All of these labels must be present on the PR",
             "required": false
         },
-        "REQUIRED_LABELS_BANNED": {
+        "BANNED_LABELS": {
             "description": "None of these labels should be present on the PR",
             "required": false
         },
