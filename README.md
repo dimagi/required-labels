@@ -10,6 +10,8 @@
 
 Check it out in action [here](https://github.com/dimagi/required-labels/pulls?q=is%3Aopen+is%3Apr+label%3Aexamples).
 
+There is also a longer write-up on this project [here](https://www.dimagi.com/blog/designing-a-foolproof-system-for-communicating-changes-made-to-your-software-product/).
+
 You can set customized label requirements for your PRs to enforce particular team workflows with lists of "required", "banned" or "at least one" labels. For example:
 
 - Your team requires all PRs to get sign-off from your Architecture and UX teams before being merged
