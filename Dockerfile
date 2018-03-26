@@ -11,7 +11,6 @@ RUN pip install -r requirements.txt
 ADD . /usr/src/app/
 
 ENV PORT=8080
-
 # for a flask server
 EXPOSE 8080
 

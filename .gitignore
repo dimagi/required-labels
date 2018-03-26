@@ -106,3 +106,5 @@ venv.bak/
 # custom additions
 .idea/*
 *.conf
+
+.vscode

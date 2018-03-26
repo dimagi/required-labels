@@ -27,6 +27,11 @@ def config():
     """.format(REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS)
 
 
+@app.route('/health', methods=["GET"])
+def health():
+    return 'OK'
+
+
 def event_warrants_label_check(pr_event_json):
     try:
         return pr_event_json['action'] in ['opened', 'reopened', 'labeled', 'unlabeled', 'synchronize']
