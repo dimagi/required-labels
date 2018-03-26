@@ -1,7 +1,7 @@
-import os
-from flask import Flask, request
+import os, hashlib, base64, hmac
+from flask import Flask, Response, request
 from utils import PullRequest
-from config import REQUIRED_LABELS_ALL, REQUIRED_LABELS_ANY, BANNED_LABELS
+from config import REQUIRED_LABELS_ALL, REQUIRED_LABELS_ANY, BANNED_LABELS, GITHUB_SECRET
 
 app = Flask(__name__)
 
@@ -9,6 +9,13 @@ app = Flask(__name__)
 @app.route('/', methods=["POST"])
 def main():
     event_json = request.get_json()
+    signature = request.headers['X-Hub-Signature'].split('=')[1]
+    
+    if not webhook_signature_is_valid(GITHUB_SECRET, request.data, signature):
+        return Response(
+        'Could not verify your access level for that URL.\n', 
+        401)
+
     if event_warrants_label_check(event_json):
         pull_request = PullRequest(event_json)
         print("Checking labels for PR {}".format(pull_request.issue_url))
@@ -37,6 +44,10 @@ def event_warrants_label_check(pr_event_json):
         return pr_event_json['action'] in ['opened', 'reopened', 'labeled', 'unlabeled', 'synchronize']
     except KeyError:
         return False
+
+def webhook_signature_is_valid(secret, payload, supplied):
+    signature = hmac.new(key=secret.encode(), msg=payload, digestmod=hashlib.sha1).hexdigest()
+    return hmac.compare_digest(signature, supplied)
 
 
 if __name__ == "__main__":

@@ -19,11 +19,13 @@ try:
     required_all = config.get('Labels', 'required-labels-all')
     banned = config.get('Labels', 'banned-labels')
     GITHUB_TOKEN = config.get('GitHub', 'token')
+    GITHUB_SECRET = config.get('GitHub', 'secret')
 except NoSectionError:
     required_any = os.environ.get('REQUIRED_LABELS_ANY', None)
     required_all = os.environ.get('REQUIRED_LABELS_ALL', None)
     banned = os.environ.get('BANNED_LABELS', None)
     GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', None)
+    GITHUB_SECRET = os.environ.get('GITHUB_SECRET', None)
 
 REQUIRED_LABELS_ANY = required_any.split(',') if required_any else None
 REQUIRED_LABELS_ALL = required_all.split(',') if required_all else None
