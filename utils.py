@@ -1,12 +1,15 @@
 import json
 from requests import Session
 
-from config import get_credentials, APP_NAME
+from config import APP_NAME, GITHUB_TOKEN
 
 
 session = Session()
-session.auth = get_credentials()
-session.headers.update({"User-Agent": APP_NAME})
+session.headers.update({
+    "User-Agent": APP_NAME,
+    "Authorization": f'token {GITHUB_TOKEN}'
+})
+
 
 
 class PullRequest(object):
