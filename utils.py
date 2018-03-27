@@ -61,16 +61,15 @@ class PullRequest(object):
         try:
             labels_json = self.labels
             labels_list = [l['name'] for l in labels_json]
+            valid = True
 
-            if required_any is not None and any(l in required_any for l in labels_list):
-                return True
-            if required_any is not None and not any(l in required_any for l in labels_list):
-                return False
             if required_all is not None and any(l not in labels_list for l in required_all):
-                return False
+                valid = False
+            if required_any is not None and any(l in required_any for l in labels_list):
+                valid = True
             if banned is not None and any(l in labels_list for l in banned):
-                return False
-            return True
+                valid = False
+            return valid
         except TypeError:
             print('self.labels was of unexpected format for PR event {}: {}'.format(self.issue_url, labels_json))
             return False
