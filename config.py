@@ -1,8 +1,10 @@
 import os
 import sys
 from configparser import ConfigParser, NoSectionError
+from pathlib import Path
 
 
+APP_BASEDIR = Path(os.path.abspath(__file__)).parent
 APP_NAME = "dimagi/required-labels"
 
 
@@ -12,7 +14,7 @@ class ConfigException(Exception):
 
 config_filename = "custom.conf"
 config = ConfigParser()
-config.read(config_filename)
+config.read(os.path.join(APP_BASEDIR, config_filename))
 
 try:
     required_any = config.get('Labels', 'required-labels-any')
