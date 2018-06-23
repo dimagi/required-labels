@@ -7,46 +7,57 @@ from pathlib import Path
 APP_BASEDIR = Path(os.path.abspath(__file__)).parent
 APP_NAME = "dimagi/required-labels"
 
+CONFIG_FILENAME = "custom.conf"
 
 class ConfigException(Exception):
     pass
 
 
-config_filename = "custom.conf"
-config = ConfigParser()
-config.read(os.path.join(APP_BASEDIR, config_filename))
+def generate_config():
+    config = {}
+    conf = ConfigParser()
+    conf.read(_get_config_file())
+    try:
+        config['required_any'] = conf.get('Labels', 'required-labels-any')
+        config['required_all'] = conf.get('Labels', 'required-labels-all')
+        config['banned'] = conf.get('Labels', 'banned-labels')
+        config['github_user'] = conf.get('GitHub', 'user')
+        config['github_pw'] = conf.get('GitHub', 'password')
+    except NoSectionError:
+        config['required_any'] = os.environ.get('REQUIRED_LABELS_ANY', None)
+        config['required_all'] = os.environ.get('REQUIRED_LABELS_ALL', None)
+        config['banned'] = os.environ.get('BANNED_LABELS', None)
+        config['github_user'] = os.environ.get('GITHUB_USER', None)
+        config['github_pw'] = os.environ.get('GITHUB_PW', None)
 
-try:
-    required_any = config.get('Labels', 'required-labels-any')
-    required_all = config.get('Labels', 'required-labels-all')
-    banned = config.get('Labels', 'banned-labels')
-    GITHUB_USER = config.get('GitHub', 'user')
-    GITHUB_PW = config.get('GitHub', 'password')
-except NoSectionError:
-    required_any = os.environ.get('REQUIRED_LABELS_ANY', None)
-    required_all = os.environ.get('REQUIRED_LABELS_ALL', None)
-    banned = os.environ.get('BANNED_LABELS', None)
-    GITHUB_USER = os.environ.get('GITHUB_USER', None)
-    GITHUB_PW = os.environ.get('GITHUB_PW', None)
+    for label in ['required_any', 'required_all', 'banned']:
+        config[label] = config[label].split(',') if config[label] else None
+    return config
 
-REQUIRED_LABELS_ANY = required_any.split(',') if required_any else None
-REQUIRED_LABELS_ALL = required_all.split(',') if required_all else None
-BANNED_LABELS = banned.split(',') if banned else None
+
+def _get_config_file():
+    if 'CONFIG_FILE' in os.environ:
+        return os.environ['CONFIG_FILE']
+    return os.path.join(APP_BASEDIR, CONFIG_FILENAME)
+
+
+CONFIG = generate_config()
 
 
 def get_credentials():
-    if GITHUB_USER == '' or GITHUB_PW == '':
+    if CONFIG['github_user'] == '' or CONFIG['github_pw'] == '':
         return None
     else:
-        return GITHUB_USER, GITHUB_PW
+        return CONFIG['github_user'], CONFIG['github_pw']
 
 
 UNIT_TESTING = any([arg for arg in sys.argv if 'test' in arg])
 
 
 if not UNIT_TESTING:
-    labels_configured = any([REQUIRED_LABELS_ANY, REQUIRED_LABELS_ALL, BANNED_LABELS])
-    credentials_configured = all([GITHUB_PW, GITHUB_USER])
+    labels_configured = any([CONFIG['required_any'], CONFIG['required_all'],
+                             CONFIG['banned']])
+    credentials_configured = all([CONFIG['github_pw'], CONFIG['github_user']])
     if not labels_configured or not credentials_configured:
         raise ConfigException(
             "Please ensure your config file has a [Labels] and [Github] section.\n"
@@ -54,5 +65,6 @@ if not UNIT_TESTING:
             "You can do this by running\033[1m cp {0}.template {0} \033[0m\n"
             "You can also add REQUIRED_LABELS_ALL, REQUIRED_LABELS_ANY, or BANNED_LABELS along with "
             "GITHUB_USER and GITHUB_PW as environment variables"
-            "".format(config_filename)
+            "".format(CONFIG_FILENAME)
         )
+
