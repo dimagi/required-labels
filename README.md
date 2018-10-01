@@ -83,6 +83,14 @@ $ pip install -r requirements.txt
 $ cp custom.conf.template custom.conf
 ```
 Then modify `custom.conf` with your own settings.
+Default behavior is to source this file from project cloned directory.
+
+You can source a custom file path using `CONFIG_FILE` environment variable.
+
+```sh
+$ export CONFIG_FILE=/some/path/to/config.conf
+```
+
 You can also set `REQUIRED_LABELS_ALL`, `REQUIRED_LABELS_ANY`, or `BANNED_LABELS` along with `GITHUB_USER` and `GITHUB_PW` directly as environment variables:
 
 ```sh
