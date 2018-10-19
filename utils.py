@@ -5,9 +5,7 @@ from exceptions import NoGitHubTokenException
 from config import get_token, get_credentials, APP_NAME
 
 
-
-
-class PullRequest(object):
+class PullRequest:
     def __init__(self, event=None):
         self.event = event
         self._session = Session()
@@ -24,10 +22,11 @@ class PullRequest(object):
         return self.request_labels_json()
 
     def request_labels_json(self):
-        r = self._session.get(self.label_url)
-        if r.status_code >= 300:
-            print("Got a non-2xx status: ", r.url, r.headers, r.content)
-        return r.json()
+        response = self._session.get(self.label_url)
+        if response.status_code >= 300:
+            print("Got a non-2xx status: ", response.url, response.headers,
+                  response.content)
+        return response.json()
 
     @property
     def label_url(self):
@@ -37,8 +36,8 @@ class PullRequest(object):
         return self.post_status(self.create_status_json(required_any, required_all, banned))
 
     def post_status(self, status_json):
-        r = self._session.post(self.statuses_url, data=status_json)
-        return r.status_code
+        response = self._session.post(self.statuses_url, data=status_json)
+        return response.status_code
 
     @property
     def statuses_url(self):
