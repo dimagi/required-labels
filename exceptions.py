@@ -1,0 +1,2 @@
+class NoGitHubTokenException(Exception):
+    pass

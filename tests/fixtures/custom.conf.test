@@ -8,3 +8,4 @@ banned-labels:
 # Include the username and password of a user that has push access to the repository in which your Webhook is configured
 user: someuser
 password:
+token:

@@ -1,7 +1,8 @@
 import json
 from requests import Session
 
-from config import get_credentials, APP_NAME
+from exceptions import NoGitHubTokenException
+from config import get_token, get_credentials, APP_NAME
 
 
 
@@ -10,7 +11,10 @@ class PullRequest(object):
     def __init__(self, event=None):
         self.event = event
         self._session = Session()
-        self._session.auth = get_credentials()
+        try:
+            self._session.headers.update({"Authorization": f"token {get_token()}"})
+        except NoGitHubTokenException:
+            self._session.auth = get_credentials()
         self._session.headers.update({"User-Agent": APP_NAME})
         if event is not None:
             self.issue_url = event['pull_request']['issue_url']
