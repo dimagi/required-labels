@@ -4,14 +4,14 @@ from requests import Session
 from config import get_credentials, APP_NAME
 
 
-session = Session()
-session.auth = get_credentials()
-session.headers.update({"User-Agent": APP_NAME})
 
 
 class PullRequest(object):
     def __init__(self, event=None):
         self.event = event
+        self._session = Session()
+        self._session.auth = get_credentials()
+        self._session.headers.update({"User-Agent": APP_NAME})
         if event is not None:
             self.issue_url = event['pull_request']['issue_url']
 
@@ -20,7 +20,7 @@ class PullRequest(object):
         return self.request_labels_json()
 
     def request_labels_json(self):
-        r = session.get(self.label_url)
+        r = self._session.get(self.label_url)
         if r.status_code >= 300:
             print("Got a non-2xx status: ", r.url, r.headers, r.content)
         return r.json()
@@ -33,7 +33,7 @@ class PullRequest(object):
         return self.post_status(self.create_status_json(required_any, required_all, banned))
 
     def post_status(self, status_json):
-        r = session.post(self.statuses_url, data=status_json)
+        r = self._session.post(self.statuses_url, data=status_json)
         return r.status_code
 
     @property
