@@ -11,6 +11,7 @@ APP_NAME = "dimagi/required-labels"
 
 CONFIG_FILENAME = "custom.conf"
 
+
 class ConfigException(Exception):
     pass
 
@@ -57,8 +58,7 @@ def get_token():
 def get_credentials():
     if CONFIG['github_user'] == '' or CONFIG['github_pw'] == '':
         return None
-    else:
-        return CONFIG['github_user'], CONFIG['github_pw']
+    return CONFIG['github_user'], CONFIG['github_pw']
 
 
 UNIT_TESTING = any([arg for arg in sys.argv if 'test' in arg])
