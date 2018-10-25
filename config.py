@@ -3,11 +3,14 @@ import sys
 from configparser import ConfigParser, NoSectionError
 from pathlib import Path
 
+from exceptions import NoGitHubTokenException
+
 
 APP_BASEDIR = Path(os.path.abspath(__file__)).parent
 APP_NAME = "dimagi/required-labels"
 
 CONFIG_FILENAME = "custom.conf"
+
 
 class ConfigException(Exception):
     pass
@@ -23,12 +26,14 @@ def generate_config():
         config['banned'] = conf.get('Labels', 'banned-labels')
         config['github_user'] = conf.get('GitHub', 'user')
         config['github_pw'] = conf.get('GitHub', 'password')
+        config['github_token'] = conf.get('GitHub', 'token')
     except NoSectionError:
         config['required_any'] = os.environ.get('REQUIRED_LABELS_ANY', None)
         config['required_all'] = os.environ.get('REQUIRED_LABELS_ALL', None)
         config['banned'] = os.environ.get('BANNED_LABELS', None)
         config['github_user'] = os.environ.get('GITHUB_USER', None)
         config['github_pw'] = os.environ.get('GITHUB_PW', None)
+        config['github_token'] = os.environ.get('GITHUB_TOKEN', None)
 
     for label in ['required_any', 'required_all', 'banned']:
         config[label] = config[label].split(',') if config[label] else None
@@ -44,11 +49,16 @@ def _get_config_file():
 CONFIG = generate_config()
 
 
+def get_token():
+    if not CONFIG['github_token']:
+        raise NoGitHubTokenException
+    return CONFIG['github_token']
+
+
 def get_credentials():
     if CONFIG['github_user'] == '' or CONFIG['github_pw'] == '':
         return None
-    else:
-        return CONFIG['github_user'], CONFIG['github_pw']
+    return CONFIG['github_user'], CONFIG['github_pw']
 
 
 UNIT_TESTING = any([arg for arg in sys.argv if 'test' in arg])
@@ -64,7 +74,7 @@ if not UNIT_TESTING:
             "Did you forget to create a configuration file?\n"
             "You can do this by running\033[1m cp {0}.template {0} \033[0m\n"
             "You can also add REQUIRED_LABELS_ALL, REQUIRED_LABELS_ANY, or BANNED_LABELS along with "
-            "GITHUB_USER and GITHUB_PW as environment variables"
+            "GITHUB_TOKEN or GITHUB_USER and GITHUB_PW as environment variables"
             "".format(CONFIG_FILENAME)
         )
 

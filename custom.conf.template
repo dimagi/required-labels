@@ -5,6 +5,10 @@ required-labels-all:
 banned-labels:
 
 [GitHub]
-# Include the username and password of a user that has push access to the repository in which your Webhook is configured
+# The authentication method to use
+# supports both token or user/password based authentication
+# Requires push access to the repository in which Webhood is confgured
+token:
+# OR
 user:
 password:
