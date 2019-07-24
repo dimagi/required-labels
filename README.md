@@ -6,7 +6,7 @@
 ![Label requirements satisfied](https://user-images.githubusercontent.com/146896/34694324-a926ebfe-f494-11e7-983f-b10e10719c83.png)
 ![Label requirements not satisfied](https://user-images.githubusercontent.com/146896/34694323-a90da090-f494-11e7-8f44-ae6780390fc9.png)
 
-**required-labels** enforces label rules on your pull requests. We use this at [Dimagi](https://www.dimagi.com) to alert our product and design teams of external-facing changes we are making to our code. 
+**required-labels** enforces label rules on your pull requests. We use this at [Dimagi](https://www.dimagi.com) to alert our product and design teams of external-facing changes we are making to our code.
 
 Check it out in action [here](https://github.com/dimagi/required-labels/pulls?q=is%3Aopen+is%3Apr+label%3Aexamples).
 
@@ -18,7 +18,7 @@ You can set customized label requirements for your PRs to enforce particular tea
     - Set **`REQUIRED_LABELS_ALL`** to `ux-signoff, arch-signoff`. This will ensure that the `ux-signoff` and `arch-sigoff` labels have been added to that PR before allowing it to be merged.
 - Your team uses a certain label to flag something as "work in progress" that should never be merged until the label is removed.
     - Set **`BANNED_LABELS`** to `wip`. This will prevent any PR with the `wip` label from being merged.
-- Your SRE team requests that all PRs get marked as either high- or low-risk before being merged, so that if the site goes down or something is wrong, they can quickly scan for changes that developers anticipated might have adverse effects. 
+- Your SRE team requests that all PRs get marked as either high- or low-risk before being merged, so that if the site goes down or something is wrong, they can quickly scan for changes that developers anticipated might have adverse effects.
     - **`REQUIRED_LABELS_ANY`**: `high-risk,low-risk`. This will require at least one of `high-risk` or `low-risk` to be added to the PR before it can be merged.
 
 ---
@@ -43,8 +43,14 @@ Set up the required labels (comma separated):
 
 Enter the credentials:
 
-- `GITHUB_USER`: The username of the GitHub user that will post the status. We suggest you create a dummy github user for this purpose. This user *must* have permission to write to the repo in order for it to post a status. 
+- `GITHUB_TOKEN`: A github user TOKEN for user that will post the status. We suggest you create a dummy github user for this purpose. This user *must* have permission to write to the repo in order for it to post a status.
+
+**OR**
+
+- `GITHUB_USER`: The username of the GitHub user that will post the status. We suggest you create a dummy github user for this purpose. This user *must* have permission to write to the repo in order for it to post a status.
 - `GITHUB_PW`: The password for this GitHub user.
+
+> Note: The application will use GITHUB_TOKEN first if defined and will fall back to GITHUB_USER and GITHUB_PW if not.
 
 Click "deploy app". The app will deploy.
 
@@ -65,7 +71,7 @@ In the [heroku dashboard](https://dashboard.heroku.com) for your app, click `Set
 
 ### Installation
 
-- Clone this repo: 
+- Clone this repo:
 
 ```sh
 $ git clone git@github.com:dimagi/required-labels.git
