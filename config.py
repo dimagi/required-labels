@@ -67,7 +67,7 @@ UNIT_TESTING = any([arg for arg in sys.argv if 'test' in arg])
 if not UNIT_TESTING:
     labels_configured = any([CONFIG['required_any'], CONFIG['required_all'],
                              CONFIG['banned']])
-    credentials_configured = all([CONFIG['github_pw'], CONFIG['github_user']])
+    credentials_configured = any(all([CONFIG['github_pw'], CONFIG['github_user']]), CONFIG['github_token'])
     if not labels_configured or not credentials_configured:
         raise ConfigException(
             "Please ensure your config file has a [Labels] and [Github] section.\n"
@@ -77,4 +77,3 @@ if not UNIT_TESTING:
             "GITHUB_TOKEN or GITHUB_USER and GITHUB_PW as environment variables"
             "".format(CONFIG_FILENAME)
         )
-

@@ -20,11 +20,17 @@
             "description": "None of these labels should be present on the PR",
             "required": false
         },
+        "GITHUB_TOKEN": {
+            "description": "A github user token that has access to your repo, either use this or provide a GITHUB_USER and a GITHUB_PW instead",
+            "required": false
+        },
         "GITHUB_USER": {
-            "description": "The username for the github user that will post the status"
+            "description": "The username for the github user that will post the status",
+            "required": false
         },
         "GITHUB_PW": {
-            "description": "The password for the github user that will post the status"
+            "description": "The password for the github user that will post the status",
+            "required": false
         }
     },
     "buildpacks": [
