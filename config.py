@@ -15,11 +15,18 @@ config = ConfigParser()
 config.read(config_filename)
 
 try:
-    required_any = config.get('Labels', 'required-labels-any')
-    required_all = config.get('Labels', 'required-labels-all')
-    banned = config.get('Labels', 'banned-labels')
-    GITHUB_TOKEN = config.get('GitHub', 'token')
-    GITHUB_SECRET = config.get('GitHub', 'secret')
+    if request.GET.get('required_any') or request.GET.get('required_all'):
+        required_any = request.GET.get('required_any')
+        required_all = request.GET.get('required_all')
+        banned = request.GET.get('banned')
+        GITHUB_TOKEN = config.get('GitHub', 'token')
+        GITHUB_SECRET = config.get('GitHub', 'secret')
+    else:
+        required_any = config.get('Labels', 'required-labels-any')
+        required_all = config.get('Labels', 'required-labels-all')
+        banned = config.get('Labels', 'banned-labels')
+        GITHUB_TOKEN = config.get('GitHub', 'token')
+        GITHUB_SECRET = config.get('GitHub', 'secret')
 except NoSectionError:
     required_any = os.environ.get('REQUIRED_LABELS_ANY', None)
     required_all = os.environ.get('REQUIRED_LABELS_ALL', None)
