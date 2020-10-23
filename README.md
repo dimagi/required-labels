@@ -1,5 +1,5 @@
 # GitHub Required Labels
-[![Build Status](https://travis-ci.org/dimagi/required-labels.svg?branch=master)](https://travis-ci.org/dimagi/required-labels)
+[![Build Status](https://travis-ci.com/dimagi/required-labels.svg?branch=master)](https://travis-ci.com/dimagi/required-labels)
 
 :label: Automated label checking for GitHub pull requests.
 
