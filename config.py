@@ -7,7 +7,7 @@ from exceptions import NoGitHubTokenException
 
 
 APP_BASEDIR = Path(os.path.abspath(__file__)).parent
-APP_NAME = "dimagi/required-labels"
+APP_NAME = "swirlds/required-labels"
 
 CONFIG_FILENAME = "custom.conf"
 
